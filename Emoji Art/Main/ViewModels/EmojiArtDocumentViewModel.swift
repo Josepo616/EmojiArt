@@ -10,6 +10,7 @@ import SwiftUI
 class EmojiArtDocumentViewModel: ObservableObject {
     typealias Emoji = EmojiArtModel.Emoji
     @Published private var emojiArt = EmojiArtModel()
+    @Published var selectedEmojiIds: Set<EmojiArtModel.Emoji.ID> = []
 
     var emojis: [Emoji] { emojiArt.emojis }
     var background: URL? { emojiArt.background }
