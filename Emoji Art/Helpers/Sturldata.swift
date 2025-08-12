@@ -14,7 +14,7 @@ enum Sturldata: Transferable {
     case string(String)
     case url(URL)
     case data(Data)
-    
+
     init(url: URL) {
         // some URLs have the data for an image directly embedded in the URL itself
         // (i.e. they are NOT a REFERENCE to the data somewhere else like most are)
@@ -26,7 +26,7 @@ enum Sturldata: Transferable {
             self = .url(url.imageURL)
         }
     }
-    
+
     init(string: String) {
         // if the string looks like a URL, we're treat it like one
         if string.hasPrefix("http"), let url = URL(string: string) {
@@ -50,11 +50,16 @@ extension URL {
     // (e.g. https://searchresult.searchengine.com?imgurl=https://actualimageurl.jpg)
     // this property returns the first embedded url it finds (if any)
     // if there is no embedded url, it returns self
-    
+
     var imageURL: URL {
-        if let queryItems = URLComponents(url: self, resolvingAgainstBaseURL: true)?.queryItems {
+        if let queryItems = URLComponents(
+            url: self,
+            resolvingAgainstBaseURL: true
+        )?.queryItems {
             for queryItem in queryItems {
-                if let value = queryItem.value, value.hasPrefix("http"), let imgurl = URL(string: value) {
+                if let value = queryItem.value, value.hasPrefix("http"),
+                    let imgurl = URL(string: value)
+                {
                     return imgurl
                 }
             }
@@ -67,13 +72,15 @@ extension URL {
     // (this is as opposed to, for example, "https://stanford.edu/image.jpg")
     // images are rarely passed around using data schemes
     // it generally only makes sense for small images (thumbnails, etc.)
-    
+
     var dataSchemeImageData: Data? {
         let urlString = absoluteString
         // is this a data scheme url with some sort of image as the mime type?
         if urlString.hasPrefix("data:image") {
             // yes, find the comma that separates the meta info from the image data
-            if let comma = urlString.firstIndex(of: ","), comma < urlString.endIndex {
+            if let comma = urlString.firstIndex(of: ","),
+                comma < urlString.endIndex
+            {
                 let meta = urlString[..<comma]
                 // we can only handle base64 encoded data
                 if meta.hasSuffix("base64") {
