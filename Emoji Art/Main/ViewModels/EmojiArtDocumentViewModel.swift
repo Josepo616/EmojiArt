@@ -11,18 +11,8 @@ class EmojiArtDocumentViewModel: ObservableObject {
     typealias Emoji = EmojiArtModel.Emoji
     @Published private var emojiArt = EmojiArtModel()
 
-    init() {
-        // emojiArt.addEmoji("⛳️", at: .init(x: -200, y: -150), size: 200)
-        // emojiArt.addEmoji("⚽️", at: .init(x: 250, y: 100), size: 80)
-
-    }
-    var emojis: [Emoji] {
-        emojiArt.emojis
-    }
-
-    var background: URL? {
-        emojiArt.background
-    }
+    var emojis: [Emoji] { emojiArt.emojis }
+    var background: URL? { emojiArt.background }
 
     // MARK: - INTENT(S)
 
@@ -36,34 +26,38 @@ class EmojiArtDocumentViewModel: ObservableObject {
     }
 
     func move(_ emoji: Emoji, by offset: CGOffset) {
-        let existingPosition = emojiArt[emoji].position
+        let pos = emojiArt[emoji].position
         emojiArt[emoji].position = Emoji.Position(
-            x: existingPosition.x + Int(offset.width),
-            y: existingPosition.y - Int(offset.height)
+            x: pos.x + Int(offset.width),
+            y: pos.y - Int(offset.height)
         )
-    }
-
-    func move(emojiWithId id: Emoji.ID, by offset: CGOffset) {
-        if let emoji = emojiArt[id] {
-            move(emoji, by: offset)
-        }
     }
 
     func resize(_ emoji: Emoji, by scale: CGFloat) {
         emojiArt[emoji].size = Int(CGFloat(emojiArt[emoji].size) * scale)
     }
 
+    func move(emojiWithId id: Emoji.ID, by offset: CGOffset) {
+        withEmoji(id) { move($0, by: offset) }
+    }
+
     func resize(emojiWithId id: Emoji.ID, by scale: CGFloat) {
+        withEmoji(id) { resize($0, by: scale) }
+    }
+
+    // MARK: - Private Helpers
+
+    private func withEmoji(_ id: Emoji.ID, perform action: (Emoji) -> Void) {
         if let emoji = emojiArt[id] {
-            resize(emoji, by: scale)
+            action(emoji)
         }
     }
 }
 
+// MARK: - Extentions
+
 extension EmojiArtModel.Emoji {
-    var font: Font {
-        Font.system(size: CGFloat(size))
-    }
+    var font: Font { .system(size: CGFloat(size)) }
 }
 
 extension EmojiArtModel.Emoji.Position {

@@ -9,11 +9,11 @@ import SwiftUI
 
 struct EmojiArtDocumentView: View {
     @ObservedObject var document: EmojiArtDocumentViewModel
-    @GestureState private var gestureZoom: CGFloat = 1
-    @GestureState private var gesturePan: CGOffset = .zero
-    @State private var zoom: CGFloat = 1
-    @State private var pan: CGOffset = .zero
-    private let paletteEmojiSize: CGFloat = 40
+    @GestureState var gestureZoom: CGFloat = 1
+    @GestureState var gesturePan: CGOffset = .zero
+    @State var zoom: CGFloat = 1
+    @State var pan: CGOffset = .zero
+    let paletteEmojiSize: CGFloat = 40
     typealias Emoji = EmojiArtModel.Emoji
 
     var body: some View {
@@ -25,54 +25,11 @@ struct EmojiArtDocumentView: View {
                 .scrollIndicators(.hidden)
         }
     }
+}
 
-    private var documentBody: some View {
-        GeometryReader { geometry in
-            ZStack {
-                Color.white
-                documentContents(in: geometry)
-                    .scaleEffect(zoom * gestureZoom)
-                    .offset(pan + gesturePan)
-            }
-            .gesture(panGesture.simultaneously(with: zoomGesture))
-            .dropDestination(for: Sturldata.self) { sturldatas, location in
-                return drop(sturldatas, at: location, in: geometry)
-            }
-        }
-    }
-
-    private var zoomGesture: some Gesture {
-        MagnificationGesture()
-            .updating($gestureZoom) { inMotionPinchScale, gestureZoom, _ in
-                gestureZoom = inMotionPinchScale
-            }
-            .onEnded { endingPinchScale in
-                zoom *= endingPinchScale
-            }
-    }
-
-    private var panGesture: some Gesture {
-        DragGesture()
-            .updating($gesturePan) { value, gesturePan, _ in
-                gesturePan = value.translation
-            }
-            .onEnded { value in
-                pan += value.translation
-            }
-    }
-
-    @ViewBuilder
-    private func documentContents(in geometry: GeometryProxy) -> some View {
-        AsyncImage(url: document.background)
-            .position(Emoji.Position.zero.in(geometry))
-        ForEach(document.emojis) { emoji in
-            Text(emoji.string)
-                .font(emoji.font)
-                .position(emoji.position.in(geometry))
-        }
-    }
-
-    private func drop(
+// MARK: - Extentions
+extension EmojiArtDocumentView {
+    func drop(
         _ sturldatas: [Sturldata],
         at location: CGPoint,
         in geometry: GeometryProxy
@@ -97,7 +54,7 @@ struct EmojiArtDocumentView: View {
         return false
     }
 
-    private func emojiPosition(at location: CGPoint, in geometry: GeometryProxy)
+    func emojiPosition(at location: CGPoint, in geometry: GeometryProxy)
         -> Emoji.Position
     {
         let center = geometry.frame(in: .local).center

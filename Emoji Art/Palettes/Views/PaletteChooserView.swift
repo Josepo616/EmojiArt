@@ -17,6 +17,9 @@ struct PaletteChooserView: View {
         }
         .clipped()
     }
+}
+
+extension PaletteChooserView {
 
     var chooser: some View {
         AnimatedActionButton(systemImage: "paintpalette") {
@@ -39,7 +42,7 @@ struct PaletteChooserView: View {
     func view(for palette: PaletteModel) -> some View {
         HStack {
             Text(palette.name)
-            ScrollingEmojis(palette.emojis)
+            EmojisScroll(palette.emojis)
         }
         .id(palette.id)
         .transition(
@@ -49,27 +52,4 @@ struct PaletteChooserView: View {
             )
         )
     }
-}
-
-struct ScrollingEmojis: View {
-    let emojis: [String]
-
-    init(_ emojis: String) {
-        self.emojis = emojis.uniqued.map(String.init)
-    }
-    var body: some View {
-        ScrollView(.horizontal) {
-            HStack {
-                ForEach(emojis, id: \.self) { emoji in
-                    Text(emoji)
-                        .draggable(emoji)
-                }
-            }
-        }
-    }
-}
-
-#Preview {
-    PaletteChooserView()
-        .environmentObject(PaletteStoreViewModel(named: "Preview"))
 }

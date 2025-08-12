@@ -12,17 +12,17 @@ class PaletteStoreViewModel: ObservableObject {
     @Published var palettes: [PaletteModel]
     @Published var _cursorIndex = 0
 
-    init(named name: String) {
-        self.name = name
-        palettes = PaletteModel.builtins
-        if palettes.isEmpty {
-            palettes = [PaletteModel(name: "Warning", emojis: "⚠️")]
-        }
-    }
-
     var cursorIndex: Int {
         get { boundsCheckedPaletteIndex(_cursorIndex) }
         set { _cursorIndex = boundsCheckedPaletteIndex(newValue) }
+    }
+
+    init(named name: String) {
+        self.name = name
+        palettes = PaletteCatalog.builtins
+        if palettes.isEmpty {
+            palettes = [PaletteModel(name: "Warning", emojis: "⚠️")]
+        }
     }
 
     private func boundsCheckedPaletteIndex(_ index: Int) -> Int {
