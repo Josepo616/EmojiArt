@@ -72,6 +72,9 @@ extension EmojiArtDocumentView {
                     } else {
                         document.selectedEmojiIds.insert(emoji.id)
                     }
+                    if document.selectedEmojiIds.isEmpty {
+                        document.enableCanvaGestures()
+                    }
                 }
 
             base.contextMenu {
@@ -79,7 +82,6 @@ extension EmojiArtDocumentView {
                     document.deleteEmojis(emoji: emoji)
                 }
             }
-
         }
 
         return

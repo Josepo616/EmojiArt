@@ -38,10 +38,14 @@ class EmojiArtDocumentViewModel: ObservableObject {
             
 
             if selectedEmojiIds.isEmpty {
-                isMovingCanva = true
-                isZoomCanva = true
+                enableCanvaGestures()
             }
         }
+    }
+    
+    func enableCanvaGestures() {
+        isMovingCanva = true
+        isZoomCanva = true
     }
 
     func move(_ emoji: Emoji, by offset: CGOffset) {
