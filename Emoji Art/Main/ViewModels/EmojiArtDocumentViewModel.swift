@@ -15,8 +15,6 @@ class EmojiArtDocumentViewModel: ObservableObject {
     @Published var isZoomCanva = true
     @Published var lastDragPosition: CGPoint?
 
-
-
     var emojis: [Emoji] { emojiArt.emojis }
     var background: URL? { emojiArt.background }
 
@@ -29,6 +27,21 @@ class EmojiArtDocumentViewModel: ObservableObject {
     func addEmojis(_ emoji: String, at position: Emoji.Position, size: CGFloat)
     {
         emojiArt.addEmoji(emoji, at: position, size: Int(size))
+    }
+
+    func deleteEmojis(emoji: Emoji) {
+        if let index = emojiArt.emojis.firstIndex(where: { $0.id == emoji.id })
+        {
+            emojiArt.emojis.remove(at: index)
+            selectedEmojiIds.remove(emoji.id)
+            print(selectedEmojiIds)
+            
+
+            if selectedEmojiIds.isEmpty {
+                isMovingCanva = true
+                isZoomCanva = true
+            }
+        }
     }
 
     func move(_ emoji: Emoji, by offset: CGOffset) {
@@ -50,32 +63,33 @@ class EmojiArtDocumentViewModel: ObservableObject {
     func resize(emojiWithId id: Emoji.ID, by scale: CGFloat) {
         withEmoji(id) { resize($0, by: scale) }
     }
-    
-    func moveEmoji(id: Emoji.ID, by translation: CGSize, in geometry: GeometryProxy, zoomScale: CGFloat) {
-        guard let index = emojiArt.emojis.firstIndex(where: { $0.id == id }) else { return }
-        
+
+    func moveEmoji(
+        id: Emoji.ID,
+        by translation: CGSize,
+        in geometry: GeometryProxy,
+        zoomScale: CGFloat
+    ) {
+        guard let index = emojiArt.emojis.firstIndex(where: { $0.id == id })
+        else { return }
+
         let halfWidth = Int(geometry.size.width / 2)
         let halfHeight = Int(geometry.size.height / 2)
-        
+
         let sensitivity: CGFloat = 0.1
         // Ajustamos la traslación por sensibilidad y zoom
         let adjustedX = translation.width * sensitivity / zoomScale
         let adjustedY = translation.height * sensitivity / zoomScale
-        
+
         var newX = emojiArt.emojis[index].position.x + Int(adjustedX)
         var newY = emojiArt.emojis[index].position.y - Int(adjustedY)
-        
+
         newX = min(max(newX, -halfWidth), halfWidth)
         newY = min(max(newY, -halfHeight), halfHeight)
-        
+
         emojiArt.emojis[index].position.x = newX
         emojiArt.emojis[index].position.y = newY
     }
-
-
-
-
-
 
     // MARK: - Private Helpers
 
