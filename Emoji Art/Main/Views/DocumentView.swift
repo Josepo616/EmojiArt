@@ -19,8 +19,13 @@ extension EmojiArtDocumentView {
                     .onTapGesture {
                         document.selectedEmojiIds.removeAll()
                     }
+                
             }
-            .gesture(panGesture.simultaneously(with: zoomGesture))
+            .gesture(panGesture
+                .simultaneously(with: zoomGesture)
+                .simultaneously(with: dragSelectedEmojisGesture(in: geometry))
+                .simultaneously(with: emojiZoomGesture)
+            )
             .dropDestination(for: Sturldata.self) { sturldatas, location in
                 return drop(sturldatas, at: location, in: geometry)
             }
@@ -51,8 +56,15 @@ extension EmojiArtDocumentView {
                 } else {
                     document.selectedEmojiIds.insert(emoji.id)
                 }
+                if document.selectedEmojiIds.isEmpty {
+                    document.isMovingCanva = true
+                    document.isZoomCanva = true
+                }
             }
             .opacity(isSelected ? 0.5 : 1)
+            .scaleEffect(isSelected ? gestureEmojiZoom : 1) 
     }
+    
+    
 }
 
