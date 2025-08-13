@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+/// A horizontal scroll view that displays a unique set of emojis,
+/// each of which can be dragged for use in the canvas or other views.
 struct EmojisScroll: View {
     let emojis: [String]
 

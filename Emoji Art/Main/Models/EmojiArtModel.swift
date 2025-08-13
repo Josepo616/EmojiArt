@@ -7,6 +7,8 @@
 
 import Foundation
 
+/// Core model representing an EmojiArt document, including an optional background URL,
+/// a list of emojis, and a nested Emoji struct with position, size, and unique ID.
 struct EmojiArtModel {
     var background: URL?
     var emojis = [Emoji]()

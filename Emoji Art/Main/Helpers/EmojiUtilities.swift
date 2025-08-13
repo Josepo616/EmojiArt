@@ -7,6 +7,8 @@
 
 import Foundation
 
+/// Extension that adds convenience methods to EmojiArtModel for adding emojis,
+/// accessing them by ID or instance, and safely updating their properties in the array.
 extension EmojiArtModel {
     private static var emojiFactory = EmojiFactory()
 

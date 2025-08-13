@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+/// Extension of EmojiArtDocumentView that defines gestures for the canvas and emojis,
+/// including pinch-to-zoom, pan, dragging selected emojis, and resizing selected emojis,
+/// while respecting flags that enable or disable canvas and emoji interactions.
 extension EmojiArtDocumentView {
 
     var zoomGesture: some Gesture {

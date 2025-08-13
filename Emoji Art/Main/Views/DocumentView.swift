@@ -4,47 +4,41 @@
 //
 //  Created by JoseAlvarez on 8/12/25.
 //
-
 import SwiftUI
 
+/// Extension of EmojiArtDocumentView that builds the main document UI,
+/// including the canvas with background and emojis, handling gestures for pan, zoom,
+/// and emoji interactions, as well as tap, selection, context menu, and drop actions.
 extension EmojiArtDocumentView {
 
     var documentBody: some View {
         GeometryReader { geometry in
             ZStack {
                 Color.white
-                documentContents(in: geometry)
-                    .scaleEffect(zoom * gestureZoom)
-                    .offset(pan + gesturePan)
-                    .onTapGesture {
-                        document.selectedEmojiIds.removeAll()
-                    }
+                canvasContents(in: geometry)
             }
-            .gesture(
-                panGesture
-                    .simultaneously(with: zoomGesture)
-                    .simultaneously(
-                        with: dragSelectedEmojisGesture(in: geometry)
-                    )
-                    .simultaneously(with: emojiZoomGesture)
-            )
+            .gesture(combinedGestures(in: geometry))
             .dropDestination(for: Sturldata.self) { sturldatas, location in
-                return drop(sturldatas, at: location, in: geometry)
+                drop(sturldatas, at: location, in: geometry)
             }
         }
     }
 
     @ViewBuilder
-    func documentContents(in geometry: GeometryProxy) -> some View {
+    private func canvasContents(in geometry: GeometryProxy) -> some View {
+        documentContent(in: geometry)
+            .scaleEffect(zoom * gestureZoom)
+            .offset(pan + gesturePan)
+            .onTapGesture {
+                document.selectedEmojiIds.removeAll()
+            }
+    }
+
+    @ViewBuilder
+    private func documentContent(in geometry: GeometryProxy) -> some View {
         backgroundView(in: geometry)
         ForEach(document.emojis) { emoji in
-            let isSelected = document.selectedEmojiIds.contains(emoji.id)
-            if isSelected {
-                emojiView(emoji, in: geometry)
-
-            } else {
-                emojiView(emoji, in: geometry)
-            }
+            emojiView(emoji, in: geometry)
         }
     }
 
@@ -59,35 +53,38 @@ extension EmojiArtDocumentView {
     ) -> some View {
         let isSelected = document.selectedEmojiIds.contains(emoji.id)
 
-        @ViewBuilder
-        var emojiText: some View {
-            let base = Text(emoji.string)
-                .font(emoji.font)
-                .fixedSize()
-                .opacity(isSelected ? 0.5 : 1)
-                .scaleEffect(isSelected ? gestureEmojiZoom : 1)
-                .onTapGesture {
-                    if isSelected {
-                        document.selectedEmojiIds.remove(emoji.id)
-                    } else {
-                        document.selectedEmojiIds.insert(emoji.id)
-                    }
-                    if document.selectedEmojiIds.isEmpty {
-                        document.enableCanvaGestures()
-                    }
-                }
-
-            base.contextMenu {
+        return Text(emoji.string)
+            .font(emoji.font)
+            .fixedSize()
+            .opacity(isSelected ? 0.5 : 1)
+            .scaleEffect(isSelected ? gestureEmojiZoom : 1)
+            .onTapGesture {
+                toggleEmojiSelection(emoji.id)
+            }
+            .contextMenu {
                 Button("Delete", systemImage: "minus.circle") {
                     document.deleteEmojis(emoji: emoji)
                 }
             }
-        }
-
-        return
-            emojiText
             .background(Color.clear)
             .position(emoji.position.in(geometry))
     }
 
+    private func toggleEmojiSelection(_ emojiId: EmojiArtModel.Emoji.ID) {
+        if document.selectedEmojiIds.contains(emojiId) {
+            document.selectedEmojiIds.remove(emojiId)
+        } else {
+            document.selectedEmojiIds.insert(emojiId)
+        }
+        if document.selectedEmojiIds.isEmpty {
+            document.enableCanvaGestures()
+        }
+    }
+
+    private func combinedGestures(in geometry: GeometryProxy) -> some Gesture {
+        panGesture
+            .simultaneously(with: zoomGesture)
+            .simultaneously(with: dragSelectedEmojisGesture(in: geometry))
+            .simultaneously(with: emojiZoomGesture)
+    }
 }

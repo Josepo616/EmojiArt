@@ -7,10 +7,13 @@
 
 import SwiftUI
 
+/// ViewModel for managing a collection of emoji palettes,
+/// keeping track of the current palette index with bounds checking,
+/// and initializing with built-in palettes or a fallback warning palette.
 class PaletteStoreViewModel: ObservableObject {
-    let name: String
     @Published var palettes: [PaletteModel]
     @Published var _cursorIndex = 0
+    let name: String
 
     var cursorIndex: Int {
         get { boundsCheckedPaletteIndex(_cursorIndex) }
@@ -34,7 +37,8 @@ class PaletteStoreViewModel: ObservableObject {
     }
 
     // MARK: - ADDING PALETTS
-
+    /// Methods for adding palettes to the collection, either by inserting at a specific index or appending,
+    /// with logic to handle duplicates by replacing or moving existing palettes as needed.
     func insert(_ palette: PaletteModel, at insertionIndex: Int? = nil) {
         let insertionIndex = boundsCheckedPaletteIndex(
             insertionIndex ?? cursorIndex

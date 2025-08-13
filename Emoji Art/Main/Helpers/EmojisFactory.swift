@@ -7,8 +7,9 @@
 
 import Foundation
 
+/// Factory struct that creates new Emoji instances with unique IDs, setting their string, position, and size.
 struct EmojiFactory {
-    private var nextId: Int = 0
+    private var nextId: Int = 1
 
     mutating func makeEmoji(
         string: String,
@@ -25,4 +26,3 @@ struct EmojiFactory {
         return emoji
     }
 }
-

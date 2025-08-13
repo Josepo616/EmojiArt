@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Model representing an emoji palette with a name, a string of emojis, and a unique identifier.
 struct PaletteModel: Identifiable {
     var name: String
     var emojis: String

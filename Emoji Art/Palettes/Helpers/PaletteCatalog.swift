@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Provides a catalog of built-in emoji palettes, each with a name and a string of related emojis for use in the app.
 struct PaletteCatalog {
     static let builtins = [
         PaletteModel(
