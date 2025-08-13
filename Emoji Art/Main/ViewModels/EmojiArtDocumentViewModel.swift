@@ -14,7 +14,7 @@ class EmojiArtDocumentViewModel: ObservableObject {
     @Published var isMovingCanva = true
     @Published var isZoomCanva = true
     @Published var lastDragPosition: CGPoint?
-
+    private var emojiFactory = EmojiFactory()
     var emojis: [Emoji] { emojiArt.emojis }
     var background: URL? { emojiArt.background }
 
@@ -24,11 +24,11 @@ class EmojiArtDocumentViewModel: ObservableObject {
         emojiArt.background = url
     }
 
-    func addEmojis(_ emoji: String, at position: Emoji.Position, size: CGFloat)
-    {
-        emojiArt.addEmoji(emoji, at: position, size: Int(size))
+    func addEmojis(_ emoji: String, at position: EmojiArtModel.Emoji.Position, size: CGFloat) {
+        let newEmoji = emojiFactory.makeEmoji(string: emoji, position: position, size: Int(size))
+        emojiArt.addEmoji(newEmoji)
     }
-
+    
     func deleteEmojis(emoji: Emoji) {
         if let index = emojiArt.emojis.firstIndex(where: { $0.id == emoji.id })
         {
