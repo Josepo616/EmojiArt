@@ -16,6 +16,10 @@ extension EmojiArtModel {
         emojis.append(emoji)
     }
 
+    private func index(of emojiId: Emoji.ID) -> Int? {
+        emojis.firstIndex(where: { $0.id == emojiId })
+    }
+    
     subscript(_ emojiId: Emoji.ID) -> Emoji? {
         guard let index = index(of: emojiId) else { return nil }
         return emojis[index]
@@ -28,9 +32,5 @@ extension EmojiArtModel {
                 emojis[index] = newValue
             }
         }
-    }
-
-    private func index(of emojiId: Emoji.ID) -> Int? {
-        emojis.firstIndex(where: { $0.id == emojiId })
     }
 }
