@@ -58,6 +58,7 @@ extension EmojiArtDocumentView {
             .fixedSize()
             .opacity(isSelected ? 0.5 : 1)
             .scaleEffect(isSelected ? gestureEmojiZoom : 1)
+            .contentShape(Rectangle())
             .onTapGesture {
                 toggleEmojiSelection(emoji.id)
             }
