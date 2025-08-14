@@ -79,4 +79,4 @@ extension Collection {
     func suffix(after: Self.Index) -> Self.SubSequence {
         suffix(from: index(after: after))
     }
-}gi
+}
