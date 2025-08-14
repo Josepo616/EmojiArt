@@ -15,6 +15,7 @@ struct EmojiArtDocumentView: View {
     @GestureState var gestureZoom: CGFloat = 1
     @GestureState var gesturePan: CGOffset = .zero
     @GestureState var gestureEmojiZoom: CGFloat = 1
+    @State var emojiDragOffsets: [Emoji.ID: CGSize] = [:]
     @State var zoom: CGFloat = 1
     @State var pan: CGOffset = .zero
     let paletteEmojiSize: CGFloat = 40

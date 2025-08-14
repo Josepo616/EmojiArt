@@ -11,7 +11,7 @@ import SwiftUI
 /// including pinch-to-zoom, pan, dragging selected emojis, and resizing selected emojis,
 /// while respecting flags that enable or disable canvas and emoji interactions.
 extension EmojiArtDocumentView {
-
+    
     var zoomGesture: some Gesture {
         MagnificationGesture()
             .updating($gestureZoom) { inMotionPinchScale, gestureZoom, _ in
@@ -23,7 +23,7 @@ extension EmojiArtDocumentView {
                 zoom *= endingPinchScale
             }
     }
-
+    
     var panGesture: some Gesture {
         DragGesture()
             .updating($gesturePan) { value, gesturePan, _ in
@@ -44,7 +44,7 @@ extension EmojiArtDocumentView {
                 }
                 let deltaX = value.location.x - document.lastDragPosition!.x
                 let deltaY = value.location.y - document.lastDragPosition!.y
-                
+        
                 for emojiId in document.selectedEmojiIds {
                     document.isMovingCanva = false
                     document.moveEmoji(id: emojiId, by: CGSize(width: deltaX, height: deltaY), in: geometry, zoomScale: 0.1)
@@ -70,6 +70,32 @@ extension EmojiArtDocumentView {
                 for emojiId in document.selectedEmojiIds {
                     document.resize(emojiWithId: emojiId, by: finalScale)
                     
+                }
+            }
+    }
+    
+    //MARK: - Extra credits
+    func individualDragGesture(
+        for emoji: EmojiArtModel.Emoji,
+        isSelected: Bool,
+        in geometry: GeometryProxy,
+        emojiDragOffsets: Binding<[Emoji.ID: CGSize]>,
+    ) -> some Gesture {
+        DragGesture()
+            .onChanged { value in
+                if !isSelected {
+                    emojiDragOffsets.wrappedValue[emoji.id] = value.translation
+                }
+            }
+            .onEnded { value in
+                if !isSelected {
+                    document.moveEmoji(
+                        id: emoji.id,
+                        by: value.translation,
+                        in: geometry,
+                        zoomScale: 0.1
+                    )
+                    emojiDragOffsets.wrappedValue[emoji.id] = .zero
                 }
             }
     }

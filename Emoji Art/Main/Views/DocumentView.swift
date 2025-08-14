@@ -58,6 +58,7 @@ extension EmojiArtDocumentView {
             .fixedSize()
             .opacity(isSelected ? 0.5 : 1)
             .scaleEffect(isSelected ? gestureEmojiZoom : 1)
+
             .contentShape(Rectangle())
             .onTapGesture {
                 toggleEmojiSelection(emoji.id)
@@ -68,6 +69,16 @@ extension EmojiArtDocumentView {
                 }
             }
             .background(Color.clear)
+            .offset(isSelected ? .zero : emojiDragOffsets[emoji.id] ?? .zero)
+            .gesture(
+                !isSelected ?
+                individualDragGesture(
+                    for: emoji,
+                    isSelected: isSelected,
+                    in: geometry,
+                    emojiDragOffsets: $emojiDragOffsets,
+                ) : nil
+            )
             .position(emoji.position.in(geometry))
     }
 
