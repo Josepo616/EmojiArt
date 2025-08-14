@@ -9,6 +9,7 @@ import SwiftUI
 
 typealias CGOffset = CGSize
 
+/// CGRect extension providing a center point property and initializer for positioning by center.
 extension CGRect {
     var center: CGPoint {
         CGPoint(x: midX, y: midY)
@@ -24,6 +25,7 @@ extension CGRect {
     }
 }
 
+/// CGOffset extension adding support for addition operations between offsets.
 extension CGOffset {
     static func + (lhs: CGOffset, rhs: CGOffset) -> CGOffset {
         CGOffset(width: lhs.width + rhs.width, height: lhs.height + rhs.height)
@@ -33,13 +35,9 @@ extension CGOffset {
     }
 }
 
+/// String extension that returns a new string with duplicate characters removed.
 extension String {
-    // removes any duplicate Characters
-    // preserves the order of the Characters
     var uniqued: String {
-        // not super efficient
-        // would only want to use it on small(ish) strings
-        // and we wouldn't want to call it in a tight loop or something
         reduce(into: "") { sofar, element in
             if !sofar.contains(element) {
                 sofar.append(element)
@@ -48,6 +46,7 @@ extension String {
     }
 }
 
+/// AnyTransition extension defining custom roll-up and roll-down view transitions.
 extension AnyTransition {
     static let rollUp: AnyTransition = .asymmetric(
         insertion: .move(edge: .bottom),
@@ -59,6 +58,7 @@ extension AnyTransition {
     )
 }
 
+/// A customizable button view that triggers its action with an animation.
 struct AnimatedActionButton: View {
     var title: String? = nil
     var systemImage: String? = nil
