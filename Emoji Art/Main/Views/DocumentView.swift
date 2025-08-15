@@ -38,6 +38,7 @@ extension EmojiArtDocumentView {
             .offset(pan + gesturePan)
             .onTapGesture {
                 document.selectedEmojiIds.removeAll()
+                document.enableCanvaGestures()
             }
     }
     
