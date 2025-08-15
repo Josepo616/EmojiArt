@@ -23,7 +23,11 @@ extension PaletteChooserView {
                 systemImage: "minus.circle",
                 role: .destructive
             ) {
-                store.palettes.remove(at: store.cursorIndex)
+                if store.cursorIndex >= 0
+                    && store.cursorIndex < store.palettes.count
+                {
+                    store.palettes.remove(at: store.cursorIndex)
+                }
             }
         }
     }

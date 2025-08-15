@@ -29,11 +29,15 @@ class PaletteStoreViewModel: ObservableObject {
     }
 
     private func boundsCheckedPaletteIndex(_ index: Int) -> Int {
-        var index = index % palettes.count
-        if index < 0 {
-            index += palettes.count
+        if palettes.isEmpty {
+            return 0
+        } else {
+            var index = index % palettes.count
+            if index < 0 {
+                index += palettes.count
+            }
+            return index
         }
-        return index
     }
 
     // MARK: - ADDING PALETTS

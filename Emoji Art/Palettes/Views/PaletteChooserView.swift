@@ -14,7 +14,14 @@ struct PaletteChooserView: View {
     var body: some View {
         HStack {
             chooser
-            view(for: store.palettes[store.cursorIndex])
+            if store.cursorIndex >= 0
+                && store.cursorIndex < store.palettes.count
+            {
+                view(for: store.palettes[store.cursorIndex])
+            } else {
+                Text("Emoji palette empty, please add some!")
+                    .font(.headline)
+            }
         }
         .clipped()
     }
