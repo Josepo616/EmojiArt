@@ -21,6 +21,9 @@ extension EmojiArtDocumentView {
             .dropDestination(for: Sturldata.self) { sturldatas, location in
                 drop(sturldatas, at: location, in: geometry)
             }
+            .onAppear {
+                document.canvasSize = geometry.size
+            }
         }
     }
 

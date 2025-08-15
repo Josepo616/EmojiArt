@@ -39,22 +39,20 @@ extension EmojiArtDocumentView {
     func dragSelectedEmojisGesture(in geometry: GeometryProxy) -> some Gesture {
         DragGesture()
             .onChanged { value in
-                if document.lastDragPosition == nil {
-                    document.lastDragPosition = value.location
-                }
+                setLastDragPosition(value)
+                
                 let deltaX = value.location.x - document.lastDragPosition!.x
                 let deltaY = value.location.y - document.lastDragPosition!.y
         
                 for emojiId in document.selectedEmojiIds {
                     document.isMovingCanva = false
-                    document.moveEmoji(id: emojiId, by: CGSize(width: deltaX, height: deltaY), in: geometry, zoomScale: 0.1)
+                    document.moveEmoji(id: emojiId, by: CGSize(width: deltaX, height: deltaY), in: document.canvasSize, zoomScale: 0.1)
                 }
                 
                 document.lastDragPosition = value.location
             }
             .onEnded { _ in
                 document.lastDragPosition = nil
-                
             }
     }
     
@@ -78,25 +76,36 @@ extension EmojiArtDocumentView {
     func individualDragGesture(
         for emoji: EmojiArtModel.Emoji,
         isSelected: Bool,
-        in geometry: GeometryProxy,
+        in geometry: CGSize,
         emojiDragOffsets: Binding<[Emoji.ID: CGSize]>,
     ) -> some Gesture {
         DragGesture()
             .onChanged { value in
                 if !isSelected {
+                    setLastDragPosition(value)
+                    
+                    let deltaX = value.location.x - document.lastDragPosition!.x
+                    let deltaY = value.location.y - document.lastDragPosition!.y
+                    
                     emojiDragOffsets.wrappedValue[emoji.id] = value.translation
-                }
-            }
-            .onEnded { value in
-                if !isSelected {
                     document.moveEmoji(
                         id: emoji.id,
-                        by: value.translation,
+                        by: CGSize(width: deltaX, height: deltaY),
                         in: geometry,
                         zoomScale: 0.1
                     )
                     emojiDragOffsets.wrappedValue[emoji.id] = .zero
                 }
             }
+            .onEnded { value in
+                document.lastDragPosition = nil
+                
+            }
+    }
+    
+    private func setLastDragPosition(_ value: DragGesture.Value) {
+        if document.lastDragPosition == nil {
+            document.lastDragPosition = value.location
+        }
     }
 }

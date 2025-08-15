@@ -18,6 +18,7 @@ class EmojiArtDocumentViewModel: ObservableObject {
     @Published var isMovingCanva = true
     @Published var isZoomCanva = true
     @Published var lastDragPosition: CGPoint?
+    @Published var canvasSize: CGSize = .zero
     private var emojiFactory = EmojiFactory()
     var emojis: [Emoji] { emojiArt.emojis }
     var background: URL? { emojiArt.background }
@@ -84,14 +85,14 @@ class EmojiArtDocumentViewModel: ObservableObject {
     func moveEmoji(
         id: Emoji.ID,
         by translation: CGSize,
-        in geometry: GeometryProxy,
+        in geometry: CGSize,
         zoomScale: CGFloat
     ) {
         guard let index = emojiArt.emojis.firstIndex(where: { $0.id == id })
         else { return }
         
-        let halfWidth = Int(geometry.size.width / 2)
-        let halfHeight = Int(geometry.size.height / 2)
+        let halfWidth = Int(geometry.width / 2)
+        let halfHeight = Int(geometry.height / 2)
         let sensitivity: CGFloat = 0.1
         let adjustedX = translation.width * sensitivity / zoomScale
         let adjustedY = translation.height * sensitivity / zoomScale

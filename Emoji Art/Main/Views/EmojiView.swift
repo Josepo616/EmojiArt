@@ -40,7 +40,7 @@ extension EmojiArtDocumentView {
                 individualDragGesture(
                     for: emoji,
                     isSelected: isSelected,
-                    in: geometry,
+                    in: document.canvasSize,
                     emojiDragOffsets: $emojiDragOffsets,
                 ) : nil
             )
