@@ -62,7 +62,7 @@ extension AnyTransition {
 struct AnimatedActionButton: View {
     var title: String? = nil
     var systemImage: String? = nil
-    var role: ButtonRole?
+    var role: ButtonRole? 
     let action: () -> Void
 
     init(
