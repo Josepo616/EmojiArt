@@ -16,10 +16,12 @@ extension EmojiArtDocumentView {
         MagnificationGesture()
             .updating($gestureZoom) { inMotionPinchScale, gestureZoom, _ in
                 guard document.isZoomCanva else { return }
+                
                 gestureZoom = inMotionPinchScale
             }
             .onEnded { endingPinchScale in
                 guard document.isZoomCanva else { return }
+                
                 document.zoom *= endingPinchScale
             }
     }
@@ -28,10 +30,12 @@ extension EmojiArtDocumentView {
         DragGesture()
             .updating($gesturePan) { value, gesturePan, _ in
                 guard document.isMovingCanva else { return }
+                
                 gesturePan = value.translation
             }
             .onEnded { value in
                 guard document.isMovingCanva else { return }
+                
                 document.pan += value.translation
             }
     }

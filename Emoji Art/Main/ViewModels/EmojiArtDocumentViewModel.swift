@@ -138,7 +138,7 @@ extension EmojiArtModel.Emoji.Position {
 /// setting the background or adding a new emoji at a calculated position relative to the canvas.
 extension EmojiArtDocumentView {
     func drop(
-        _ sturldatas: [Sturldata],
+        _ sturldatas: [MediaResource],
         at location: CGPoint,
         in geometry: GeometryProxy
     ) -> Bool {

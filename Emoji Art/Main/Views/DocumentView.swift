@@ -4,7 +4,7 @@
 //
 //  Created by JoseAlvarez on 8/12/25.
 //
-import SwiftUI
+import SwiftUI 
 
 /// Extension of EmojiArtDocumentView that builds the main document UI,
 /// including the canvas with background, handling gestures for pan, zoom,
@@ -18,7 +18,7 @@ extension EmojiArtDocumentView {
                 canvasContents(in: geometry)
             }
             .gesture(combinedGestures(in: geometry))
-            .dropDestination(for: Sturldata.self) { sturldatas, location in
+            .dropDestination(for: MediaResource.self) { sturldatas, location in
                 drop(sturldatas, at: location, in: geometry)
             }
             .onAppear {

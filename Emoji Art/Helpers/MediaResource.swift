@@ -8,7 +8,7 @@
 import CoreTransferable
 
 /// Enum representing transferable data as a string, URL, or raw data, with automatic type inference.
-enum Sturldata: Transferable {
+enum MediaResource: Transferable {
     case string(String)
     case url(URL)
     case data(Data)
@@ -30,9 +30,9 @@ enum Sturldata: Transferable {
     }
 
     static var transferRepresentation: some TransferRepresentation {
-        ProxyRepresentation { Sturldata(string: $0) }
-        ProxyRepresentation { Sturldata(url: $0) }
-        ProxyRepresentation { Sturldata.data($0) }
+        ProxyRepresentation { MediaResource(string: $0) }
+        ProxyRepresentation { MediaResource(url: $0) }
+        ProxyRepresentation { MediaResource.data($0) }
     }
 }
 
