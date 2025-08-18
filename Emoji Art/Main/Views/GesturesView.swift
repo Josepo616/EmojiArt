@@ -67,7 +67,6 @@ extension EmojiArtDocumentView {
             .onEnded { finalScale in
                 for emojiId in document.selectedEmojiIds {
                     document.resize(emojiWithId: emojiId, by: finalScale)
-                    
                 }
             }
     }
@@ -99,7 +98,6 @@ extension EmojiArtDocumentView {
             }
             .onEnded { value in
                 document.lastDragPosition = nil
-                
             }
     }
     
