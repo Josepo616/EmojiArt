@@ -31,18 +31,13 @@ extension PaletteChooserView {
             }
         }
     }
-
+    
     func view(for palette: PaletteModel) -> some View {
         HStack {
             Text(palette.name)
             EmojisScroll(palette.emojis)
         }
         .id(palette.id)
-        .transition(
-            .asymmetric(
-                insertion: .move(edge: .bottom),
-                removal: .move(edge: .top)
-            )
-        )
+        .transition(.rollUp)
     }
 }

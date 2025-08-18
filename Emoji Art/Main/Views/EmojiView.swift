@@ -44,7 +44,7 @@ extension EmojiArtDocumentView {
                     emojiDragOffsets: $emojiDragOffsets,
                 ) : nil
             )
-            .position(emoji.position.in(geometry))
+            .position(emoji.position.positionEmoji(geometry))
     }
     
     private func toggleEmojiSelection(_ emojiId: EmojiArtModel.Emoji.ID) {

@@ -47,7 +47,7 @@ extension EmojiArtDocumentView {
     
     private func backgroundView(in geometry: GeometryProxy) -> some View {
         AsyncImage(url: document.background)
-            .position(Emoji.Position.zero.in(geometry))
+            .position(Emoji.Position.zero.positionEmoji(geometry))
     }
 
     private func combinedGestures(in geometry: GeometryProxy) -> some Gesture {

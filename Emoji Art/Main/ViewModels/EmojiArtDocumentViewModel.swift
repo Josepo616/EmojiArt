@@ -122,7 +122,7 @@ extension EmojiArtModel.Emoji {
 }
 
 extension EmojiArtModel.Emoji.Position {
-    func `in`(_ geometry: GeometryProxy) -> CGPoint {
+    func positionEmoji(_ geometry: GeometryProxy) -> CGPoint {
         let center = geometry.frame(in: .local).center
         return CGPoint(x: center.x + CGFloat(x), y: center.y - CGFloat(y))
     }
