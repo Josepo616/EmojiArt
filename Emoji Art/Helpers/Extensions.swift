@@ -14,6 +14,7 @@ extension CGRect {
     var center: CGPoint {
         CGPoint(x: midX, y: midY)
     }
+
     init(center: CGPoint, size: CGSize) {
         self.init(
             origin: CGPoint(
@@ -30,6 +31,7 @@ extension CGOffset {
     static func + (lhs: CGOffset, rhs: CGOffset) -> CGOffset {
         CGOffset(width: lhs.width + rhs.width, height: lhs.height + rhs.height)
     }
+
     static func += (lhs: inout CGOffset, rhs: CGOffset) {
         lhs = lhs + rhs
     }
@@ -52,6 +54,7 @@ extension AnyTransition {
         insertion: .move(edge: .bottom),
         removal: .move(edge: .top)
     )
+
     static let rollDown: AnyTransition = .asymmetric(
         insertion: .move(edge: .top),
         removal: .move(edge: .bottom)
@@ -62,7 +65,7 @@ extension AnyTransition {
 struct AnimatedActionButton: View {
     var title: String? = nil
     var systemImage: String? = nil
-    var role: ButtonRole? 
+    var role: ButtonRole?
     let action: () -> Void
 
     init(
