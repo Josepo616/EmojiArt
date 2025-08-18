@@ -37,8 +37,8 @@ extension EmojiArtDocumentView {
     
     private func canvasContents(in geometry: GeometryProxy) -> some View {
         documentContent(in: geometry)
-            .scaleEffect(zoom * gestureZoom)
-            .offset(pan + gesturePan)
+            .scaleEffect(document.zoom * gestureZoom)
+            .offset(document.pan + gesturePan)
             .onTapGesture {
                 document.selectedEmojiIds.removeAll()
                 document.enableCanvaGestures()

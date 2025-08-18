@@ -16,7 +16,7 @@ extension EmojiArtDocumentView {
         in geometry: GeometryProxy
     ) -> some View {
         let isSelected = document.selectedEmojiIds.contains(emoji.id)
-        let baseScale = emojiZoomScales[emoji.id] ?? 1
+        let baseScale = document.emojiZoomScales[emoji.id] ?? 1
         let scale = isSelected ? baseScale * gestureEmojiZoom : baseScale
 
         return Text(emoji.string)
@@ -34,14 +34,14 @@ extension EmojiArtDocumentView {
                 }
             }
             .background(Color.clear)
-            .offset(isSelected ? .zero : emojiDragOffsets[emoji.id] ?? .zero)
+            .offset(isSelected ? .zero : document.emojiDragOffsets[emoji.id] ?? .zero)
             .gesture(
                 !isSelected ?
                 individualDragGesture(
                     for: emoji,
                     isSelected: isSelected,
                     in: document.canvasSize,
-                    emojiDragOffsets: $emojiDragOffsets,
+                    emojiDragOffsets: document.$emojiDragOffsets,
                 ) : nil
             )
             .position(emoji.position.positionEmoji(geometry))

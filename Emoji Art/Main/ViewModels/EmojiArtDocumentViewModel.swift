@@ -20,6 +20,12 @@ class EmojiArtDocumentViewModel: ObservableObject {
     @Published var lastDragPosition: CGPoint?
     @Published var canvasSize: CGSize = .zero
     private var emojiFactory = EmojiFactory()
+    
+    
+    @State var emojiDragOffsets: [Emoji.ID: CGSize] = [:]
+    @State var emojiZoomScales: [Emoji.ID: CGFloat] = [:]
+    @State var zoom: CGFloat = 1
+    @State var pan: CGOffset = .zero
     var emojis: [Emoji] { emojiArt.emojis }
     var background: URL? { emojiArt.background }
 
@@ -145,7 +151,7 @@ extension EmojiArtDocumentView {
                 document.addEmojis(
                     emoji,
                     at: emojiPosition(at: location, in: geometry),
-                    size: paletteEmojiSize / zoom
+                    size: paletteEmojiSize / document.zoom
                 )
                 return true
             default:
@@ -160,8 +166,8 @@ extension EmojiArtDocumentView {
     {
         let center = geometry.frame(in: .local).center
         return Emoji.Position(
-            x: Int((location.x - center.x - pan.width) / zoom),
-            y: Int(-(location.y - center.y - pan.height) / zoom)
+            x: Int((location.x - center.x - document.pan.width) / document.zoom),
+            y: Int(-(location.y - center.y - document.pan.height) / document.zoom)
         )
     }
 }

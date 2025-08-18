@@ -20,7 +20,7 @@ extension EmojiArtDocumentView {
             }
             .onEnded { endingPinchScale in
                 guard document.isZoomCanva else { return }
-                zoom *= endingPinchScale
+                document.zoom *= endingPinchScale
             }
     }
     
@@ -32,7 +32,7 @@ extension EmojiArtDocumentView {
             }
             .onEnded { value in
                 guard document.isMovingCanva else { return }
-                pan += value.translation
+                document.pan += value.translation
             }
     }
     
